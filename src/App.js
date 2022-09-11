@@ -2,6 +2,7 @@ import { Button, Card, Col, Row } from "antd";
 import "antd/dist/antd.css";
 import { useEffect, useState } from "react";
 import AddUsers from "./Components/AddUsers";
+import FormField from "./Components/Shared/FormField";
 import UpdateUser from "./Components/UpdateUser";
 import Users from "./Components/Users";
 function App() {
@@ -15,6 +16,26 @@ function App() {
     await fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
       .then((data) => setUsers(data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleAdd = async (values) => {
+    await fetch("https://jsonplaceholder.typicode.com/users", {
+      method: "POST",
+      body: JSON.stringify({
+        id: Math.random(),
+        name: values.name,
+      }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        setUsers([...users, json]);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -62,7 +83,8 @@ function App() {
 
         <Row>
           <Col span={24}>
-            <AddUsers users={users} setUsers={setUsers} />
+            {/* <AddUsers users={users} setUsers={setUsers} /> */}
+            <FormField handleFunction={handleAdd} />
           </Col>
         </Row>
         <Row>
