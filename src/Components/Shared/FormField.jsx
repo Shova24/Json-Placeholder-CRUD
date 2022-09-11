@@ -1,10 +1,38 @@
 import { Card, Form, Input, Button, Row } from "antd";
 import React from "react";
 
-export default function FormField({ handleFunction }) {
+export default function FormField({ handleFunction, users, setUsers }) {
   const [form] = Form.useForm();
+  const handleAdd = async (values) => {
+    await fetch("https://jsonplaceholder.typicode.com/users", {
+      method: "POST",
+      body: JSON.stringify({
+        id: Math.random(),
+        name: values.name,
+      }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        setUsers([...users, json]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleEdit = () => {
+    console.log("Edit");
+  };
   const onFinish = async (values) => {
-    handleFunction(values);
+    if (handleFunction === "add") {
+      handleAdd(values);
+    } else {
+      handleEdit();
+    }
+
     form.resetFields();
   };
 

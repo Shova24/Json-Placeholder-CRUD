@@ -20,26 +20,26 @@ function App() {
         console.log(err);
       });
   };
-  const handleAdd = async (values) => {
-    await fetch("https://jsonplaceholder.typicode.com/users", {
-      method: "POST",
-      body: JSON.stringify({
-        id: Math.random(),
-        name: values.name,
-      }),
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        setUsers([...users, json]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const handleAdd = async (values) => {
+  //   await fetch("https://jsonplaceholder.typicode.com/users", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       id: Math.random(),
+  //       name: values.name,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json; charset=utf-8",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       console.log(json);
+  //       setUsers([...users, json]);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   const handleDelete = async (id) => {
     await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
       method: "DELETE",
@@ -74,6 +74,7 @@ function App() {
       .then((response) => response.json())
       .then((json) => console.log(json));
   };
+  const edit = false;
 
   return (
     <>
@@ -84,12 +85,10 @@ function App() {
         <Row>
           <Col span={24}>
             {/* <AddUsers users={users} setUsers={setUsers} /> */}
-            <FormField handleFunction={handleAdd} />
+            {edit ? <FormField handleFunction="Add" users="users" setUsers="setUsers" /> : <FormField handleFunction="Edit" users="users" setUsers="setUsers" />}
           </Col>
         </Row>
-        <Row>
-          <UpdateUser setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
-        </Row>
+        <Row>{/* <UpdateUser setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} /> */}</Row>
         <Row>
           {users.map((el) => (
             <Col xs={24} md={12} lg={8}>
