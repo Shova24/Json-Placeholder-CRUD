@@ -4,10 +4,11 @@ import React from "react";
 export default function AddUsers({ users, setUsers }) {
   const [form] = Form.useForm();
   const addUser = async (values) => {
+    console.log(users.length);
     await fetch("https://jsonplaceholder.typicode.com/users", {
       method: "POST",
       body: JSON.stringify({
-        id: users.length + 1,
+        id: Math.random(),
         name: values.name,
       }),
       headers: {
@@ -16,7 +17,8 @@ export default function AddUsers({ users, setUsers }) {
     })
       .then((response) => response.json())
       .then((json) => {
-        setUsers([json, ...users]);
+        console.log(json);
+        setUsers([...users, json]);
       })
       .catch((err) => {
         console.log(err);
@@ -25,6 +27,7 @@ export default function AddUsers({ users, setUsers }) {
     console.log(users.length);
     form.resetFields();
   };
+
   return (
     <Card style={{ borderRadius: "15px", margin: "20px" }}>
       <Form form={form} onFinish={addUser}>

@@ -2,9 +2,12 @@ import { Button, Card, Col, Row } from "antd";
 import "antd/dist/antd.css";
 import { useEffect, useState } from "react";
 import AddUsers from "./Components/AddUsers";
+import UpdateUser from "./Components/UpdateUser";
 import Users from "./Components/Users";
 function App() {
   const [users, setUsers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -35,6 +38,21 @@ function App() {
         console.log(err);
       });
   };
+  const handleEdit = async (id) => {
+    setIsModalOpen(true);
+    await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        name: "Shova",
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  };
 
   return (
     <>
@@ -48,9 +66,12 @@ function App() {
           </Col>
         </Row>
         <Row>
+          <UpdateUser setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+        </Row>
+        <Row>
           {users.map((el) => (
             <Col xs={24} md={12} lg={8}>
-              <Users user={el} key={el.id} handleDelete={handleDelete} />
+              <Users user={el} key={el.id} handleDelete={handleDelete} handleEdit={handleEdit} />
             </Col>
           ))}
         </Row>
