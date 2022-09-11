@@ -16,6 +16,25 @@ function App() {
         console.log(err);
       });
   };
+  const handleDelete = async (id) => {
+    await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return;
+        } else {
+          setUsers(
+            users.filter((user) => {
+              return user.id !== id;
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -31,7 +50,7 @@ function App() {
         <Row>
           {users.map((el) => (
             <Col xs={24} md={12} lg={8}>
-              <Users user={el} key={el.id} />
+              <Users user={el} key={el.id} handleDelete={handleDelete} />
             </Col>
           ))}
         </Row>

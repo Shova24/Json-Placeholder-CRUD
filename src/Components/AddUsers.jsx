@@ -3,12 +3,26 @@ import React from "react";
 
 export default function AddUsers({ users, setUsers }) {
   const [form] = Form.useForm();
-  const addUser = (values) => {
-    const newUser = {
-      id: users.length + 1,
-      name: values.name,
-    };
-    setUsers([newUser, ...users]);
+  const addUser = async (values) => {
+    await fetch("https://jsonplaceholder.typicode.com/users", {
+      method: "POST",
+      body: JSON.stringify({
+        id: users.length + 1,
+        name: values.name,
+      }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setUsers([json, ...users]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    console.log(users.length);
     form.resetFields();
   };
   return (
